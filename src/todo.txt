@@ -1,0 +1,3 @@
+bug: start and end node buttons dont restrict to one each
+dev: add start and end nodes for App.js state
+dev: finish implementing breadth first search

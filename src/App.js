@@ -5,18 +5,19 @@ import { useEffect, useReducer,useState } from 'react';
 import { createStore } from 'redux';
 import { reducer } from './reducer'
 import Node from './components/Node'
+import { breadth } from './algorithms/breadth';
 
 const makeNode = (row,column) =>{
-    return {row,column,isWall: false,isStart:false,isEnd:false,cost:1}
+    return {row,column,isWall: false,isStart:false,isEnd:false,cost:1, parentNode:null}
 
 }
 
 const initalizeGrid = () => {
   let grid = [];
-  for (let i = 0; i < 20; i++){
+  for (let i = 0; i < 5; i++){
     let row=[]
     
-    for (let j = 0; j < 50; j++){
+    for (let j = 0; j < 5; j++){
       row.push(makeNode(i, j));
     }
     grid.push(row);
@@ -25,7 +26,7 @@ const initalizeGrid = () => {
   return grid;
 }
 
-
+//breadth();
 
 function App() {
   //console.log('reeeee')
@@ -37,7 +38,10 @@ function App() {
 
   
   const changeGrid = (grid,row,col) => {
-  
+    if (row === -1)
+    {
+      return null
+    }
     //make sure to reset node isWall and isEnd as well
     if (start)
     {
@@ -65,10 +69,7 @@ function App() {
       setEnd(false)
       return newGrid;
     }
-  if (row === -1)
-    {
-      return null
-    }
+  
   //let newGrid = grid.slice();
   
     let node = grid[row][col];
@@ -83,6 +84,9 @@ function App() {
   return newGrid;
   }
   
+  const handleBreadth = ()=>{
+      //breadth(grid,)
+  }
   const handlePlaceStart = () => {
     setStart(!start);
   }
@@ -161,7 +165,8 @@ function App() {
         
         <div className="rowContainer">
           <button type='button' onClick={() =>handlePlaceStart()}>Place Start Node</button>
-          <button type = 'button' onClick={() => handlePlaceEnd()}>Place End Node</button>
+          <button type='button' onClick={() => handlePlaceEnd()}>Place End Node</button>
+          <button type ='button' onClick={()=>handleBreadth()}>BFS</button>
         </div>
         {
 
@@ -200,7 +205,7 @@ function App() {
           })
           
         }
-        { console.log(grid)}
+        {/* { console.log(grid)} */}
       </header>
     </div>
   );
