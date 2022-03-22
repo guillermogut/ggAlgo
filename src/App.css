@@ -43,11 +43,16 @@
 }
 /* #4f5157 */
 .node {
-  background-color: #949599;
+  background-color: #999594;
   min-width: 20px;
   min-height: 20px;
   margin-right: 1px;
   margin-left: 1px;
   margin-top: 1px;
   margin-bottom: 1px;
+}
+
+.rowContainer {
+  display: flex;
+  flex-direction: row;
 }
