@@ -108,4 +108,6 @@ export const breadth = (grid, startNode, endNode) => {
         })
 
     }
+
+    return [path,visitedNodesOrdered]
 }

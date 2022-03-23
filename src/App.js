@@ -34,9 +34,13 @@ function App() {
   const [grid, setGrid] = useState(initalizeGrid());
   const [mouseDown, setMouseDown] = useState(false);
   const [start, setStart] = useState(false);
+  const [startNode, setStartNode] = useState(false);
+  const [endNode, setEndNode] = useState(false);
   const [end, setEnd] = useState(false);
 
-  
+  const path = null;
+  const visitedNodesOrdered = null;
+
   const changeGrid = (grid,row,col) => {
     if (row === -1)
     {
@@ -76,6 +80,7 @@ function App() {
   
     const newNode = { ...node };
     newNode.isWall = !newNode.isWall;
+    
     newNode.isEnd = false;
     newNode.isStart = false;
     let newGrid = [...grid]
@@ -83,9 +88,14 @@ function App() {
   
   return newGrid;
   }
-  
+  const handleResetGrid = () =>{
+    setGrid(initalizeGrid())
+  }
   const handleBreadth = ()=>{
-      //breadth(grid,)
+    //returns path and nodes that were visited in order
+      [path,visitedNodesOrdered] = breadth(grid,startNode,endNode);
+
+      
   }
   const handlePlaceStart = () => {
     setStart(!start);
@@ -167,6 +177,7 @@ function App() {
           <button type='button' onClick={() =>handlePlaceStart()}>Place Start Node</button>
           <button type='button' onClick={() => handlePlaceEnd()}>Place End Node</button>
           <button type ='button' onClick={()=>handleBreadth()}>BFS</button>
+          <button type = 'button' onClick ={() => handleResetGrid()}>Reset</button>
         </div>
         {
 
@@ -211,4 +222,8 @@ function App() {
   );
 }
 
+const visualizeSearch = (path,visitedNodesOrdered) =>{
+
+  
+}
 export default App;
