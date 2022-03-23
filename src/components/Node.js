@@ -2,6 +2,28 @@
 import { useState, useEffect, useReducer } from 'react';
 import { reducer } from '../reducer'
 
+
+const nodeAnimStyle = {
+  backgroundColor: '#999594',
+  minWidth: '20px',
+  minHeight: '20px',
+  marginRight: '1px',
+  marginLeft: '1px',
+  marginTop: '1px',
+  marginBottom: '1px',
+  animation: 'animateNode',
+  animationDuration: '2s',
+  animationPlayState: 'initial'
+}
+const nodeStyle = {
+  backgroundColor: '#999594',
+  minWidth: '20px',
+  minHeight: '20px',
+  marginRight: '1px',
+  marginLeft: '1px',
+  marginTop: '1px',
+  marginBottom: '1px'
+}
 const Node = (props) => {
 
     
@@ -20,6 +42,7 @@ const Node = (props) => {
     const [isStart, setIsStart] = useState(props.isStart);
     const [isEnd, setIsEnd] = useState(props.isEnd);
     const [cost, setCost] = useState(props.cost)
+    const [style, setStyle] = useState(nodeStyle)
     
     //const [mouseDown, setMouseDown] = useState(false);
     //console.log(state.grid)
@@ -49,6 +72,13 @@ const Node = (props) => {
             const newColor = '#949599';
             setColor(newColor)
         }
+
+        if (props.node.animate)
+        {
+            //console.log('animate: ' + props.node.animate)
+            setStyle(nodeAnimStyle)
+        }
+
     }, [props.node]);
     return (<>
         
@@ -57,11 +87,12 @@ const Node = (props) => {
             onMouseEnter={() => props.onMouseEnter(i, j)}
             onMouseDown={() => props.onMouseDown(i, j)}
             onMouseUp = {() => props.onMouseUp()}
-            className='node'
+            className={props.stl}
             style={ {backgroundColor: color}}>
-
             
-        </div>
+            
+        </div> 
+        
     
     </>)
 }

@@ -7,17 +7,18 @@ import { reducer } from './reducer'
 import Node from './components/Node'
 import { breadth } from './algorithms/breadth';
 
+
 const makeNode = (row,column) =>{
-    return {row,column,isWall: false,isStart:false,isEnd:false,cost:1, parentNode:null}
+    return {row,column,isWall: false,isStart:false,isEnd:false,cost:1, parentNode:null, visited:false,animate:false}
 
 }
 
 const initalizeGrid = () => {
   let grid = [];
-  for (let i = 0; i < 5; i++){
+  for (let i = 0; i < 20; i++){
     let row=[]
     
-    for (let j = 0; j < 5; j++){
+    for (let j = 0; j < 20; j++){
       row.push(makeNode(i, j));
     }
     grid.push(row);
@@ -34,12 +35,12 @@ function App() {
   const [grid, setGrid] = useState(initalizeGrid());
   const [mouseDown, setMouseDown] = useState(false);
   const [start, setStart] = useState(false);
-  const [startNode, setStartNode] = useState(false);
-  const [endNode, setEndNode] = useState(false);
+  const [startNode, setStartNode] = useState({});
+  const [endNode, setEndNode] = useState({});
   const [end, setEnd] = useState(false);
 
-  const path = null;
-  const visitedNodesOrdered = null;
+  let path = null;
+  let visitedNodesOrdered = new Set();
 
   const changeGrid = (grid,row,col) => {
     if (row === -1)
@@ -58,6 +59,7 @@ function App() {
       let newGrid = [...grid]
       newGrid[row][col] = {...newNode};
       setStart(false);
+      setStartNode(newNode);
       return newGrid;
     }
     if (end)
@@ -68,9 +70,10 @@ function App() {
       newNode.isWall = false;
       newNode.isStart = false;
       newNode.isEnd = true;
-      let newGrid = [...grid]
+      let newGrid = [...grid];
       newGrid[row][col] = {...newNode};
-      setEnd(false)
+      setEnd(false);
+      setEndNode(newNode);
       return newGrid;
     }
   
@@ -90,11 +93,29 @@ function App() {
   }
   const handleResetGrid = () =>{
     setGrid(initalizeGrid())
+    setStartNode({});
+    setEndNode({})
   }
   const handleBreadth = ()=>{
     //returns path and nodes that were visited in order
-      [path,visitedNodesOrdered] = breadth(grid,startNode,endNode);
+    [path,visitedNodesOrdered] = breadth(grid,startNode,endNode);
+    //breadth(grid,startNode,endNode);
+    console.log('in animation thing')
+      console.log("length of the things")
+      console.log(path.length)
+      console.log(visitedNodesOrdered.length)
+    visitedNodesOrdered.forEach(node => {
+      
+      
+      setTimeout(() => {
 
+        let newGrid = [...grid]
+        let newNode = { ...newGrid[node.row][node.column] }
+        newNode.animate = true;
+        newGrid[node.row][node.column] = {...newNode}
+        setGrid([...newGrid])
+      },10)
+    })
       
   }
   const handlePlaceStart = () => {
@@ -194,12 +215,15 @@ function App() {
                         
                         {
                           <Node 
-                            key ={colIndex}
-                            onMouseEnter={(rowIndex,colIndex) => handleMouseEnter(rowIndex,colIndex)}
-                            onMouseLeave ={() => handleMouseLeave}
-                            onMouseDown={(rowIndex,colIndex) => handleMouseDown(rowIndex,colIndex)}
-                            onMouseUp={() =>handleMouseUp()}
-                            node={{...node}}></Node>
+                            key={colIndex}
+                            onMouseEnter={(rowIndex, colIndex) => handleMouseEnter(rowIndex, colIndex)}
+                            onMouseLeave={() => handleMouseLeave}
+                            onMouseDown={(rowIndex, colIndex) => handleMouseDown(rowIndex, colIndex)}
+                            onMouseUp={() => handleMouseUp()}
+                            node={{ ...node }}
+                            stl={!node.animate? 'node':'nodeAnimate'}>
+                            
+                            </Node>
                         }
                       </div>
                     )
@@ -224,6 +248,7 @@ function App() {
 
 const visualizeSearch = (path,visitedNodesOrdered) =>{
 
-  
+  console.log(path)
+  console.log(visitedNodesOrdered)
 }
 export default App;
