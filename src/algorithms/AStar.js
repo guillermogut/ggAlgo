@@ -1,9 +1,23 @@
 import { Queue } from "./queue"
 
 
-export const breadth = (grid, startNode, endNode) => {
+export const AStar = (grid, startNode, endNode) => {
 
-
+    const h = (node) = {
+        
+    }
+    const calculateDistance = (node) => {
+        // distance formula returning an integer
+        return parseInt(Math.sqrt(Math.pow(Math.abs(node.row- endNode.row)) + Math.pow(Math.abs(node.column- endNode.column))), 10)
+        
+    }
+    const getPathCost = (path) => {
+        let pathLength = 0;
+        path.forEach(node => {
+            pathLength++;
+        })
+        return pathLength;
+    }
     const makeNode = (row,column) =>{
     return {row,column,isWall: false,isStart:false,isEnd:false,cost:1, parentNode:null, visited:false,animate:false}
 

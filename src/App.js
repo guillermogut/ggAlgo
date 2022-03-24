@@ -7,18 +7,34 @@ import { reducer } from './reducer'
 import Node from './components/Node'
 import { breadth } from './algorithms/breadth';
 
+const rows = 20;
+const cols = 20;
 
+const copyGrid = (grid) => {
+  let newGrid = []
+
+  grid.forEach((row) => {
+    let newRow = []
+    row.forEach((node) => {
+      let newNode = { ...node }
+      newRow.push(newNode)
+    })
+    row.push(newRow)
+  })
+  console.log(newGrid)
+  return newGrid;
+}
 const makeNode = (row,column) =>{
-    return {row,column,isWall: false,isStart:false,isEnd:false,cost:1, parentNode:null, visited:false,animate:false}
+    return {row,column,isWall: false,isStart:false,isEnd:false,cost:0, parentNode:null, visited:false,animate:''}
 
 }
 
 const initalizeGrid = () => {
   let grid = [];
-  for (let i = 0; i < 20; i++){
+  for (let i = 0; i < rows; i++){
     let row=[]
     
-    for (let j = 0; j < 20; j++){
+    for (let j = 0; j < cols; j++){
       row.push(makeNode(i, j));
     }
     grid.push(row);
@@ -26,10 +42,26 @@ const initalizeGrid = () => {
 
   return grid;
 }
+const reInitGrid = (grid) => {
+  let newGrid = []
+  for (let i = 0; i < rows; i++){
+    
+    
+    for (let j = 0; j < cols; j++){
+      
+      grid[i][j].visited = false;
+      
+    }
+    
+  }
+
+  return newGrid=[...grid]
+}
 
 //breadth();
 
 function App() {
+  
   //console.log('reeeee')
   //const [state,dispatch] = useReducer(reducer,defaultState)
   const [grid, setGrid] = useState(initalizeGrid());
@@ -39,8 +71,9 @@ function App() {
   const [endNode, setEndNode] = useState({});
   const [end, setEnd] = useState(false);
 
+  let savedGrid = null;
   let path = null;
-  let visitedNodesOrdered = new Set();
+  let visitedNodesOrdered = [];
 
   const changeGrid = (grid,row,col) => {
     if (row === -1)
@@ -94,16 +127,18 @@ function App() {
   const handleResetGrid = () =>{
     setGrid(initalizeGrid())
     setStartNode({});
-    setEndNode({})
+    setEndNode({});
   }
-  const handleBreadth = ()=>{
+  const handleBreadth = () => {
+
+    
+    savedGrid = [...grid];
     //returns path and nodes that were visited in order
-    [path,visitedNodesOrdered] = breadth(grid,startNode,endNode);
-    //breadth(grid,startNode,endNode);
-    console.log('in animation thing')
-      console.log("length of the things")
-      console.log(path.length)
-      console.log(visitedNodesOrdered.length)
+    [path, visitedNodesOrdered] = breadth(grid, startNode, endNode);
+    
+    //console.log(visitedNodesOrdered)
+    //return
+    
     visitedNodesOrdered.forEach(node => {
       
       
@@ -111,12 +146,56 @@ function App() {
 
         let newGrid = [...grid]
         let newNode = { ...newGrid[node.row][node.column] }
-        newNode.animate = true;
+        newNode.animate = 'visit';
         newGrid[node.row][node.column] = {...newNode}
         setGrid([...newGrid])
-      },10)
-    })
+      }, 1000)
       
+      
+
+    })
+    //reset nodes
+    visitedNodesOrdered.forEach(node => {
+      
+      
+      setTimeout(() => {
+
+        let newGrid = [...grid]
+        let newNode = { ...newGrid[node.row][node.column] }
+        newNode.animate = false;
+        newGrid[node.row][node.column] = {...newNode}
+        setGrid([...newGrid])
+      }, 1000)
+      
+      
+
+    })
+
+    //now render path
+    path.forEach(node => {
+      
+      
+      setTimeout(() => {
+
+        let newGrid = [...grid]
+        let newNode = { ...newGrid[node.row][node.column] }
+        newNode.animate = 'path';
+        newGrid[node.row][node.column] = {...newNode}
+        setGrid([...newGrid])
+      }, 1000)
+      
+
+
+    })
+
+    const newGrid = [...savedGrid]
+    setGrid(reInitGrid(newGrid))
+
+    // setGrid(initalizeGrid())
+    // setStartNode(startNode);
+    // setEndNode(endNode);
+    
+    //breadth(grid,startNode,endNode)
   }
   const handlePlaceStart = () => {
     setStart(!start);
@@ -185,7 +264,8 @@ function App() {
     //setGrid(initalizeGrid());
     
     //console.log("mousedown: "+mouseDown)
-  },[])
+    
+  },[grid])
   //const gridArr = new Array(10).fill(new Array(10).fill(0));
   
   

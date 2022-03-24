@@ -22,4 +22,7 @@ export function Queue() {
   this.size = function () {
     return collection.length;
   }
+  this.includes = function (element,grid) {
+    return collection.includes(grid[element.row][element.column])
+  }
 }

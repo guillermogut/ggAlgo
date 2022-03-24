@@ -3,7 +3,19 @@ import { useState, useEffect, useReducer } from 'react';
 import { reducer } from '../reducer'
 
 
-const nodeAnimStyle = {
+const nodeAnimStylePath = {
+  backgroundColor: '#999594',
+  minWidth: '20px',
+  minHeight: '20px',
+  marginRight: '1px',
+  marginLeft: '1px',
+  marginTop: '1px',
+  marginBottom: '1px',
+  animation: 'animateNode',
+  animationDuration: '2s',
+  animationPlayState: 'initial'
+}
+const nodeAnimStyleVisit = {
   backgroundColor: '#999594',
   minWidth: '20px',
   minHeight: '20px',
@@ -73,10 +85,25 @@ const Node = (props) => {
             setColor(newColor)
         }
 
-        if (props.node.animate)
+        if (props.node.animatePath)
         {
             //console.log('animate: ' + props.node.animate)
-            setStyle(nodeAnimStyle)
+
+            setTimeout(() => {
+                
+                
+            }, 200);
+            
+        }
+        if (props.node.animateVisit)
+        {
+            //console.log('animate: ' + props.node.animate)
+
+            setTimeout(() => {
+                
+                setStyle(nodeAnimStyleVisit)
+            }, 200);
+            
         }
 
     }, [props.node]);
@@ -89,7 +116,6 @@ const Node = (props) => {
             onMouseUp = {() => props.onMouseUp()}
             className={props.stl}
             style={ {backgroundColor: color}}>
-            
             
         </div> 
         
